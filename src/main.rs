@@ -27,7 +27,7 @@ fn main() {
         // Draw the custom font text
         d.draw_text_ex(
             &font,
-            &document.data,
+            &document.data.get_text(),
             Vector2::new(10.0, 10.0),
             20.0,
             2.0,

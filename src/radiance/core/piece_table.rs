@@ -1,26 +1,32 @@
+#[derive(Debug)]
 pub enum PieceSource {
     Original,
     Add,
 }
-
+#[derive(Debug)]
 pub struct Piece {
     start: usize,
     length: usize,
     source: PieceSource,
 }
-
+#[derive(Debug)]
 pub struct PieceTable {
-    original: String,
-    add: String,
-    pieces: Vec<Piece>,
+    pub original: String,
+    pub add: String,
+    pub pieces: Vec<Piece>,
 }
 
 impl PieceTable {
     pub fn new(original: String) -> PieceTable {
+        let length = original.len();
         PieceTable {
             original,
             add: String::new(),
-            pieces: Vec::new(),
+            pieces: vec![Piece {
+                start: 0,
+                length,
+                source: PieceSource::Original,
+            }],
         }
     }
 
@@ -31,20 +37,11 @@ impl PieceTable {
         let piece_idx = self.find_piece(pos);
         let piece = self.pieces.get(piece_idx).unwrap();
 
-        if piece.start + piece.length > pos {
-            //incase of insert in between
-        } else if self.pieces.len() <= 1 {
-            //edge case when less than 2 element present in piece table
-        } else {
-            self.pieces.insert(
-                piece_idx,
-                Piece {
-                    source: PieceSource::Add,
-                    start: add_pos,
-                    length: text.len(),
-                },
-            );
-        }
+        self.pieces.push(Piece {
+            source: PieceSource::Add,
+            start: add_pos,
+            length: text.len(),
+        });
     }
 
     fn find_piece(&self, pos: usize) -> usize {
@@ -55,7 +52,19 @@ impl PieceTable {
             }
             offset += piece.length;
         }
-
         self.pieces.len() - 1
+    }
+
+    pub fn get_text(&self) -> String {
+        let mut result = String::new();
+        println!("{:?}", self.pieces);
+        for piece in self.pieces.iter() {
+            let source = match piece.source {
+                PieceSource::Original => &self.original,
+                PieceSource::Add => &self.add,
+            };
+            result += &source[piece.start..(piece.start + piece.length)];
+        }
+        result
     }
 }

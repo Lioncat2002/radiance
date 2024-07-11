@@ -1,7 +1,9 @@
 use std::fs;
 
+use super::core::piece_table::PieceTable;
+
 pub struct Document {
-    pub data: String,
+    pub data: PieceTable,
     pub lines: usize,
 }
 
@@ -10,11 +12,17 @@ impl Document {
         let data = fs::read_to_string(filepath).expect("File not found! [document::Document::new]");
         let line_data: Vec<&str> = data.split('\n').collect();
         let lines = line_data.len();
-        Document { data, lines }
+        Document {
+            data: PieceTable::new(data),
+            lines,
+        }
     }
 
     pub fn empty() -> Document {
-        let data = String::new();
-        Document { data, lines: 0 }
+        let original = "".to_string();
+        Document {
+            data: PieceTable::new(original),
+            lines: 0,
+        }
     }
 }
