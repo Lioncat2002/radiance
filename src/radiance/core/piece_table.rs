@@ -1,15 +1,15 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PieceSource {
     Original,
     Add,
 }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Piece {
     start: usize,
     length: usize,
     source: PieceSource,
 }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PieceTable {
     pub original: String,
     pub add: String,
@@ -44,6 +44,21 @@ impl PieceTable {
         });
     }
 
+    pub fn pop(&mut self, pos: usize, length: usize) {
+        let mut new_pieces = Vec::new();
+        let mut current_pos = 0;
+
+        for piece in self.pieces.clone() {
+            if current_pos + piece.length <= pos {
+                new_pieces.push(piece.clone());
+            } else if current_pos >= pos + length {
+                new_pieces.push(piece.clone());
+            }
+            current_pos += piece.length;
+        }
+        self.pieces = new_pieces;
+    }
+
     fn find_piece(&self, pos: usize) -> usize {
         let mut offset = 0;
         for (idx, piece) in self.pieces.iter().enumerate() {
@@ -57,7 +72,7 @@ impl PieceTable {
 
     pub fn get_text(&self) -> String {
         let mut result = String::new();
-        println!("{:?}", self.pieces);
+
         for piece in self.pieces.iter() {
             let source = match piece.source {
                 PieceSource::Original => &self.original,

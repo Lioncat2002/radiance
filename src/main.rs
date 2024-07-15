@@ -16,8 +16,8 @@ fn main() {
 
     // Main game loop
     while !rl.window_should_close() {
-        input_handler.process_text_entered(&mut rl, &mut document.data);
-        input_handler.process_key_pressed(&mut rl, &mut document.data);
+        input_handler.process_text_entered(&mut rl, &mut document);
+        input_handler.process_key_pressed(&mut rl, &mut document);
 
         let mut d = rl.begin_drawing(&thread);
 
