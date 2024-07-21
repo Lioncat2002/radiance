@@ -24,6 +24,7 @@ impl<'a> InputHandler<'a> {
             match key {
                 KeyboardKey::KEY_ENTER => {
                     document.data.insert(document.data.original.len(), "\n");
+                    document.lines += 1;
                     self.cursor.move_down();
                 }
                 KeyboardKey::KEY_BACKSPACE => {

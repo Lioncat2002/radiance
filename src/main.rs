@@ -24,6 +24,17 @@ fn main() {
         // Catpucchin machiato base
         d.clear_background(Color::new(36, 39, 58, 255));
 
+        for line in 1..=document.lines {
+            d.draw_text_ex(
+                &font,
+                &line.to_string(),
+                Vector2::new(5.0, (10.0 * line as f32)),
+                20.0,
+                2.0,
+                Color::new(202, 211, 245, 255),
+            );
+        }
+
         // Draw the custom font text
         d.draw_text_ex(
             &font,
